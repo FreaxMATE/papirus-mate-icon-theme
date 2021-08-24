@@ -29,8 +29,19 @@ wget -qO- https://raw.githubusercontent.com/FreaxMATE/papirus-mate-icon-theme/ma
 
 ### Build
 
+#### From scratch
+
 ```sh
 git clone --recursive https://github.com/FreaxMATE/papirus-mate-icon-theme.git
 cd papirus-mate-icon-theme
+./build.sh
+```
+
+#### From existing local repo
+
+```sh
+cd papirus-mate-icon-theme
+git pull
+git submodule foreach git pull
 ./build.sh
 ```

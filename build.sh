@@ -81,6 +81,9 @@ headline "Coping places icons from Papirus to Papirus-MATE icon theme ..."
 src_theme_dir="$SRC_DIR/${ICON_THEMES[0]//-MATE/}"
 dst_theme_dir="$DST_DIR/${ICON_THEMES[0]}"
 
+echo "DST_THEME_DIR: $dst_theme_dir"
+echo "SRC_THEME_DIR: $src_theme_dir"
+
 for places_dir in "${PLACES_DIRS[@]}"; do
 	[ -d "$src_theme_dir/$places_dir" ] || continue
 	size_dir="${places_dir%%/*}"
@@ -123,16 +126,26 @@ done
 
 headline "Changing blue folder color to mategreen ..."
 # -----------------------------------------------------------------------------
-find -L "$dst_theme_dir" -regextype posix-extended \
-	-regex ".*/${sizes_regex}/places/${icons_regex}[-.].*" \
-	-print0 | while read -r -d $'\0' file; do
+declare -a color=$new_folder_color # "mategreen"
+declare -a size prefix file_path file_name symlink_path
+declare -a sizes=(22x22 24x24 32x32 48x48 64x64)
+declare -a prefixes=("folder-$color" "user-$color")
 
-	target="${file##*/}"
-	symlink="${file/-$new_folder_color/}"
+for size in "${sizes[@]}"; do
+	for prefix in "${prefixes[@]}"; do
+		for file_path in "$dst_theme_dir/$size/places/$prefix"{-*,}.svg; do
+			[ -f "$file_path" ] || continue  # is a file
+			[ -L "$file_path" ] && continue  # is not a symlink
 
-	ln -sf "$target" "$symlink"
+			file_name="${file_path##*/}"
+			symlink_path="${file_path/-$color/}"  # remove color suffix
+
+			ln -sf "$file_name" "$symlink_path" || {
+				fatal "Fail to create '$symlink_path' symlink"
+			}
+		done
+	done
 done
-
 
 headline "Changing color in .ColorScheme-Highlight class of monochrome icons ..."
 # -----------------------------------------------------------------------------

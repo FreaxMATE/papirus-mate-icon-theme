@@ -2,6 +2,31 @@
 
 a green folder color variant of the papirus icon theme to match the MATE green color.
 
+
+### Installation
+
+Use the scripts to install the latest version directly from this repo (independently of your distro):
+
+**NOTE:** Use the same script to update icon themes.
+
+#### ROOT directory (recommended)
+
+```
+wget -qO- https://raw.githubusercontent.com/FreaxMATE/papirus-mate-icon-theme/main/install.sh | sh
+```
+
+#### HOME directory for GTK
+
+```
+wget -qO- https://raw.githubusercontent.com/FreaxMATE/papirus-mate-icon-theme/main/install.sh | DESTDIR="$HOME/.icons" sh
+```
+
+#### \*BSD systems
+
+```
+wget -qO- https://raw.githubusercontent.com/FreaxMATE/papirus-mate-icon-theme/main/install.sh | env DESTDIR="/usr/local/share/icons" sh
+```
+
 ### Build
 
 ```sh
